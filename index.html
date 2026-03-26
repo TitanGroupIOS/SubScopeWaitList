@@ -280,22 +280,21 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; }
       </div>
       <div class="success-msg" id="success-msg">✓ You're on the list — we'll be in touch soon.</div>
 
-
-
     </div>
     <div class="right-footer">© 2026 Titan Group of Companies · getsubscope.com</div>
   </div>
 
 </div>
 <script>
-  const FORM_ENDPOINT = 'https://formspree.io/f/xgonqarp';
+  const LOOPS_API_KEY = 'd861863e8dbaf09e42e659159a540fad';
+  const LOOPS_ENDPOINT = 'https://app.loops.so/api/v1/contacts/create';
 
   document.getElementById('email-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') joinWaitlist();
   });
 
   async function joinWaitlist() {
-    const email = document.getElementById('email-input').value.trim();
+    const email = document.getElementById('email-input').value.trim().toLowerCase();
     if (!email || !email.includes('@')) {
       document.getElementById('email-input').style.borderColor = 'rgba(239,68,68,0.5)';
       return;
@@ -304,15 +303,24 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; }
     btn.textContent = 'Joining...';
     btn.disabled = true;
     try {
-      const res = await fetch(FORM_ENDPOINT, {
+      const res = await fetch(LOOPS_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + LOOPS_API_KEY
+        },
+        body: JSON.stringify({
+          email: email,
+          source: 'waitlist',
+          userGroup: 'waitlist'
+        })
       });
       if (res.ok) {
         document.getElementById('waitlist-form').style.display = 'none';
         document.getElementById('success-msg').style.display = 'block';
       } else {
+        const err = await res.json();
+        console.error('Loops error:', err);
         btn.textContent = 'Request Early Access →';
         btn.disabled = false;
         alert('Something went wrong. Please try again.');
