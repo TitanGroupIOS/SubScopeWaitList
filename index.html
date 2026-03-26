@@ -309,8 +309,7 @@ html, body {
 
 </div>
 <script>
-  const LOOPS_API_KEY = 'd861863e8dbaf09e42e659159a540fad';
-  const LOOPS_ENDPOINT = 'https://app.loops.so/api/v1/contacts/create';
+  const LOOPS_ENDPOINT = 'https://qdivpbcxagwwymtpueht.supabase.co/functions/v1/loops-contact';
 
   document.getElementById('email-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') joinWaitlist();
@@ -328,10 +327,7 @@ html, body {
     try {
       const res = await fetch(LOOPS_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + LOOPS_API_KEY
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email,
           source: 'waitlist',
