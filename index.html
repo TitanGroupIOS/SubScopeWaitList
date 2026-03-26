@@ -296,6 +296,10 @@ html, body {
         <div class="waitlist-headline">Join the Waitlist</div>
         <p class="waitlist-sub">Be first in line when SubScope launches.</p>
         <div id="waitlist-form">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <input class="waitlist-input" type="text" id="name-input" placeholder="First name" autocomplete="given-name" style="margin-bottom:0">
+            <input class="waitlist-input" type="text" id="company-input" placeholder="Company (optional)" autocomplete="organization" style="margin-bottom:0">
+          </div>
           <input class="waitlist-input" type="email" id="email-input" placeholder="your@email.com" autocomplete="email">
           <button class="waitlist-btn" onclick="joinWaitlist()">Request Early Access →</button>
           <p class="waitlist-note">No spam. Launch notification only.</p>
@@ -317,6 +321,8 @@ html, body {
 
   async function joinWaitlist() {
     const email = document.getElementById('email-input').value.trim().toLowerCase();
+    const firstName = document.getElementById('name-input').value.trim();
+    const company = document.getElementById('company-input').value.trim();
     if (!email || !email.includes('@')) {
       document.getElementById('email-input').style.borderColor = 'rgba(239,68,68,0.5)';
       return;
@@ -330,6 +336,8 @@ html, body {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email,
+          firstName: firstName || undefined,
+          company: company || undefined,
           source: 'waitlist',
           userGroup: 'waitlist'
         })
